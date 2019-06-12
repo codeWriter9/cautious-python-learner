@@ -1,0 +1,78 @@
+'''
+Created on 14-May-2019
+
+@author: Sanjay Ghosh
+'''
+import array;
+
+alphabet = [];
+alphabet.append('a');
+alphabet.append('b');
+alphabet.append('c');
+alphabet.append('d');
+alphabet.append('e');
+alphabet.append('f');
+alphabet.append('g');
+alphabet.append('h');
+alphabet.append('i');
+alphabet.append('j');
+alphabet.append('k');
+alphabet.append('l');
+alphabet.append('m');
+alphabet.append('n');
+alphabet.append('o');
+alphabet.append('p');
+alphabet.append('q');
+alphabet.append('r');
+alphabet.append('s');
+alphabet.append('t');
+alphabet.append('u');
+alphabet.append('v');
+alphabet.append('w');
+alphabet.append('x');
+alphabet.append('y');
+alphabet.append('z');
+
+def rowc(row, index):
+    if row < index:
+        return index;
+    elif row > index:
+        return row - index;
+    else :
+        return 0;    
+
+def p_format(index, row,my_str):
+    index_ = index - 1
+    for i in range(2 * index - 2, rowc(row, index), -2):        
+            my_str = my_str[0:i] + alphabet[index_] + my_str[i + 1:];
+            index_ = index_ - 1;
+    return my_str;
+
+def c_format(index, row, my_str):
+    outer = index + (index - 1);    
+    if row == 0 or row > index:
+        return my_str[0:outer - 1:1]+alphabet[index - 1]+my_str[outer:];
+    else :
+        return p_format(index, row, my_str);
+    
+def x_format(size, row, my_str):
+    if row == 0 or row == size + 1:
+        my_str = my_str[ 0 : size * 2 - 2 ] + alphabet[ size - 1] + my_str[ size * 2 - 1 :];
+    else :
+        for x in range(1, 2):
+            my_str = my_str[ 0 : size * 2 - x + 1] + alphabet[ size - x] + my_str[ size * 2 - x + 1 :];            
+    return my_str;
+
+def print_rangoli(size):
+    # your code goes here
+    outer = 2 * (size - 1) + 1;    
+    for i in range(outer):
+        my_str = '-';
+        inner = 2 * ( outer - 1 ) + 1;         
+        for j in range(1, inner):
+            my_str = my_str + '-';
+        print(x_format(size, i, my_str));
+
+
+if __name__ == '__main__':
+    print_rangoli(int(input()));

@@ -1,0 +1,72 @@
+#size 3
+
+----c----
+--c-b-c--
+c-b-a-b-c
+--c-b-c--
+----c----
+
+
+----4----
+--2-4-6--
+0-2-4-6-8
+--2-4-6--
+----4----
+
+size = 3
+row = size * 2 - 1
+column = row * 2 - 1
+
+element [ row = 0] [  col = size * 2 - 1 ] = alpbhabet [ size - 1 ] 
+
+element [ row = 1] [  col = size * 2 - 1 ] = alpbhabet [ size - 2 ] 
+element [ row = 1] [  col = size * 2 - 3 ] = alpbhabet [ size - 1 ]
+element [ row = 1] [  col = size * 2 + 3 ] = alpbhabet [ size - 1 ]
+ 
+element [ row = 2] [  col = size * 2 - 1 ] = alpbhabet [ size - 3 ] 
+element [ row = 2] [  col = size * 2 - 3 ] = alpbhabet [ size - 2 ] 
+element [ row = 2] [  col = size * 2 + 3 ] = alpbhabet [ size - 2 ] 
+element [ row = 2] [  col = size * 2 - 5 ] = alpbhabet [ size - 1 ] 
+element [ row = 2] [  col = size * 2 + 5 ] = alpbhabet [ size - 1 ] 
+
+element [ row = 3] [  col = size * 2 - 1 ] = alpbhabet [ size - 2 ] 
+element [ row = 3] [  col = size * 2 - 3 ] = alpbhabet [ size - 1 ]
+element [ row = 3] [  col = size * 2 + 3 ] = alpbhabet [ size - 1 ]
+
+element [ row = 4] [  col = size * 2 - 1 ] = alpbhabet [ size - 1 ] 
+
+
+
+#size 5
+
+--------e--------
+------e-d-e------
+----e-d-c-d-e----
+--e-d-c-b-c-d-e--
+e-d-c-b-a-b-c-d-e
+--e-d-c-b-c-d-e--
+----e-d-c-d-e----
+------e-d-e------
+--------e--------
+
+#size 10
+
+------------------j------------------
+----------------j-i-j----------------
+--------------j-i-h-i-j--------------
+------------j-i-h-g-h-i-j------------
+----------j-i-h-g-f-g-h-i-j----------
+--------j-i-h-g-f-e-f-g-h-i-j--------
+------j-i-h-g-f-e-d-e-f-g-h-i-j------
+----j-i-h-g-f-e-d-c-d-e-f-g-h-i-j----
+--j-i-h-g-f-e-d-c-b-c-d-e-f-g-h-i-j--
+j-i-h-g-f-e-d-c-b-a-b-c-d-e-f-g-h-i-j
+--j-i-h-g-f-e-d-c-b-c-d-e-f-g-h-i-j--
+----j-i-h-g-f-e-d-c-d-e-f-g-h-i-j----
+------j-i-h-g-f-e-d-e-f-g-h-i-j------
+--------j-i-h-g-f-e-f-g-h-i-j--------
+----------j-i-h-g-f-g-h-i-j----------
+------------j-i-h-g-h-i-j------------
+--------------j-i-h-i-j--------------
+----------------j-i-j----------------
+------------------j------------------
