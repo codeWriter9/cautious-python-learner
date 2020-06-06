@@ -4,6 +4,8 @@ Created on 10-Aug-2019
 1st Edit 05-Oct-2019
 
 @author: Sanjay Ghosh
+
+$py SortStrFileContents.py --src /c/work/Spam.txt --dst /c/work/gmailPoweredSearch.txt
 '''
 from os import listdir;
 from os.path import isfile, join;
