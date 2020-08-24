@@ -1,0 +1,16 @@
+from random import randrange;
+
+def guess(user_input):  
+  actual = randrange(1, 100, 1);
+  while(actual!=user_input):
+    if actual > user_input :
+      print("You aimed too low");
+    elif actual < user_input:
+      print("You aimed too high");
+    user_input = int(input("Enter guess(1-100):"));
+  print("Correct!\r\nBye.");
+  
+
+
+
+guess(int(input("Enter guess(1-100):")));
