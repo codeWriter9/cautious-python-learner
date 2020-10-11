@@ -20,18 +20,16 @@ def lcs(a, b, i, j):
     else:
         return max(lcs(a, b, i, j -1), lcs(a, b, i - 1, j))
 
-# Complete the abbreviation function below.
-def abbreviation(a, b):
-    print(lcs(a, b, len(a), len(b)));
-    return 0;
+
+def starter(a, b):
+    print("LCS is;" + str(lcs(a, b, len(a), len(b))));
+    return;
 
 if __name__ == '__main__':
-    
-
-    q = int(input())
+    q = int(input("Numbe of sequences for testing:"))
     for q_itr in range(q):
-        a = input()
-        b = input()
-        result = abbreviation(a, b)
-        print(result)
+        a = input("Enter First Sequence:")
+        b = input("Enter  2nd  Sequence:")
+        result = starter(a, b)
+        print();
 
