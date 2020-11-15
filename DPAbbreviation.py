@@ -1,0 +1,37 @@
+'''
+Created on 13-Sep-2020
+
+@author: Sanjay Ghosh
+'''
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+def lcs(a, b, i, j):
+    if i==0 or j==0:
+        return 0
+    if a[i - 1] == b[j - 1]:
+        return 1 + lcs(a, b, i - 1, j - 1);
+    else:
+        return max(lcs(a, b, i, j -1), lcs(a, b, i - 1, j))
+
+# Complete the abbreviation function below.
+def abbreviation(a, b):
+    print(lcs(a, b, len(a), len(b)));
+    return 0;
+
+if __name__ == '__main__':
+    
+
+    q = int(input())
+    for q_itr in range(q):
+        a = input()
+        b = input()
+        result = abbreviation(a, b)
+        print(result)
+
