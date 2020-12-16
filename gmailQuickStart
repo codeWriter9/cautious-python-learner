@@ -1,0 +1,84 @@
+from __future__ import print_function
+import argparse
+import pickle
+import os.path
+import sys
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+# If modifying these scopes, delete the file token.pickle.
+SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
+GLOBAL_SPAM_LIST = []
+
+
+def load_arguments():
+    print("=======loading==arguments=====")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("spam_email_list", help="provide spam email list")
+    args = parser.parse_args()
+    if args.spam_email_list:
+        print(args.spam_email_list)
+        if os.path.exists(args.spam_email_list):
+            with open(args.spam_email_list, 'r') as spam_list_file:
+                for line in spam_list_file:
+                    GLOBAL_SPAM_LIST.append(line)
+    print("=======loaded=====")
+    print(GLOBAL_SPAM_LIST)
+    return ()
+
+def creds():
+    """Shows basic usage of the Gmail API.
+    Lists the user's Gmail labels.
+    """
+    print("=======Verifying====Credentials=====")
+    creds = None
+    # The file token.pickle stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+    return creds
+
+
+def main():
+
+    arguments_tuple = load_arguments()
+    #sys.exit()
+    print("=======Connecting==To===Server=====")
+    service = build('gmail', 'v1', credentials=creds())
+
+    # Call the Gmail API
+    results = service.users().messages().list(userId='me', maxResults=20).execute()
+    messages = results.get('messages', [])
+
+    if not messages:
+        print('No messages found.')
+    else:
+        print('Fetching messages:')
+        for message in messages:
+            try:
+                msg_body = service.users().messages().get(userId='me', id=message['id']).execute()
+                headers = msg_body['payload']['headers']
+                for header in headers:
+                    if header['name'] == 'From' and header['name'] in GLOBAL_SPAM_LIST:
+                        print("Deleting Message:" + str(message['id']) + " :from: " + str(header['value']))
+                    elif header['name'] == 'From':
+                        print("Skipping Message:" + " :from: " + str(header['value']))
+            except:
+                continue
+
+if __name__ == '__main__':
+    main()
