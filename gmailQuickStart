@@ -3,6 +3,7 @@ import argparse
 import pickle
 import os.path
 import sys
+import re
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -73,10 +74,14 @@ def main():
                 msg_body = service.users().messages().get(userId='me', id=message['id']).execute()
                 headers = msg_body['payload']['headers']
                 for header in headers:
-                    if header['name'] == 'From' and header['name'] in GLOBAL_SPAM_LIST:
-                        print("Deleting Message:" + str(message['id']) + " :from: " + str(header['value']))
-                    elif header['name'] == 'From':
-                        print("Skipping Message:" + " :from: " + str(header['value']))
+                    if header['name'] == 'From' :
+                        email_list = header['value'].split(' ')
+                        email = re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1])
+                        print(re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1]))
+                        if header['name'] == 'From' and email in GLOBAL_SPAM_LIST:
+                            print("Deleting Message:" + str(message['id']) + " :from: " + str(email))
+                        elif header['name'] == 'From':
+                            print("Skipping Message:" + " :from: " + str(email))
             except:
                 continue
 
