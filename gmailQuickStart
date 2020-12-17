@@ -25,10 +25,11 @@ def load_arguments():
             with open(args.spam_email_list, 'r') as spam_list_file:
                 for line in spam_list_file:
                     res.append(line)
-    print("=======loaded=====")
+    print("=======loaded====SPAM=LIST=====")
     for email in res:
         GLOBAL_SPAM_LIST.append(email.replace("\n", ""))
     print(GLOBAL_SPAM_LIST)
+    print("==============================")
     return ()
 
 def creds():
@@ -57,6 +58,11 @@ def creds():
     return creds
 
 
+def extract_email(raw_email):
+    email_list = raw_email.split(' ')
+    return re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1])
+
+
 def main():
 
     arguments_tuple = load_arguments()
@@ -78,17 +84,15 @@ def main():
                 headers = msg_body['payload']['headers']
                 for header in headers:
                     if header['name'] == 'From' :
-                        email_list = header['value'].split(' ')
-                        email = re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1])
-                        print(re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1]))
-                        if header['name'] == 'From' and email in GLOBAL_SPAM_LIST:
+                        email = extract_email(header['value'])
+                        if email in GLOBAL_SPAM_LIST:
                             print("Deleting Message:" + str(message['id']) + " :from: " + str(email))
                             try:
                                 trash_response = service.users().messages().trash(userId='me', id=message['id']).execute()
                                 print("Deleted:" + str(message['id']) + " :Response: " + str(trash_response))
                             except:
                                 continue
-                        elif header['name'] == 'From':
+                        else:
                             print("\tSkipping Message:" + " :from: " + str(email))
             except:
                 continue
