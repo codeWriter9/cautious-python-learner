@@ -15,6 +15,7 @@ GLOBAL_SPAM_LIST = []
 
 def load_arguments():
     print("=======loading==arguments=====")
+    res = []
     parser = argparse.ArgumentParser()
     parser.add_argument("spam_email_list", help="provide spam email list")
     args = parser.parse_args()
@@ -23,8 +24,10 @@ def load_arguments():
         if os.path.exists(args.spam_email_list):
             with open(args.spam_email_list, 'r') as spam_list_file:
                 for line in spam_list_file:
-                    GLOBAL_SPAM_LIST.append(line)
+                    res.append(line)
     print("=======loaded=====")
+    for email in res:
+        GLOBAL_SPAM_LIST.append(email.replace("\n", ""))
     print(GLOBAL_SPAM_LIST)
     return ()
 
@@ -80,8 +83,13 @@ def main():
                         print(re.sub('[^a-zA-Z0-9-_*.@_]', '', email_list[len(email_list) - 1]))
                         if header['name'] == 'From' and email in GLOBAL_SPAM_LIST:
                             print("Deleting Message:" + str(message['id']) + " :from: " + str(email))
+                            try:
+                                trash_response = service.users().messages().trash(userId='me', id=message['id']).execute()
+                                print("Deleted:" + str(message['id']) + " :Response: " + str(trash_response))
+                            except:
+                                continue
                         elif header['name'] == 'From':
-                            print("Skipping Message:" + " :from: " + str(email))
+                            print("\tSkipping Message:" + " :from: " + str(email))
             except:
                 continue
 
