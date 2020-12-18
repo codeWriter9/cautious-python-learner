@@ -88,8 +88,7 @@ def main():
         for message in messages:
             try:
                 msg_body = service.users().messages().get(userId='me', id=message['id']).execute()
-                headers = msg_body['payload']['headers']
-                labels  = msg_body['labelIds']
+                headers, labels = msg_body['payload']['headers'], msg_body['labelIds']
                 for header in headers:
                     if is_from(header) and to_be_trashed(labels):
                         email = extract_email(header['value'])
@@ -99,17 +98,17 @@ def main():
                                 trash_response = service.users().messages().trash(userId='me', id=message['id']).execute()
                                 print("Trashed: " + str(message['id']) + " :Response: " + str(trash_response))
                             except Exception as inst:
-                                print(type(inst))    # the exception instance
+                                print(type(inst))
                                 continue
                         else:
                             try:
                                 print("\tSkipping Message:" + " :from: " + str(email))
                                 print("\t" + str(msg_body['labelIds']) + ":" + str(msg_body['snippet']))
                             except Exception as inst:
-                                print(type(inst))    # the exception instance
+                                print(type(inst))
                                 continue
             except  Exception as inst:
-                print(type(inst))    # the exception instance
+                print(type(inst))
                 continue
             print("\n")
 
