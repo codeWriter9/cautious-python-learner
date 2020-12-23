@@ -1,3 +1,9 @@
+"""Shows basic usage of the Gmail API.
+Pulls The list of N emails
+For each email checks against a list of spam email addresses
+If Spam then deletes
+else skips
+"""
 from __future__ import print_function
 import argparse
 import pickle
@@ -32,9 +38,6 @@ def load_arguments():
     return ()
 
 def creds():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
     print("=======Verifying====Credentials=====")
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -69,6 +72,10 @@ def to_be_trashed(labels):
     return 'IMPORTANT' not in labels and 'SENT' not in labels
 
 
+def list_messages(service, userId, numberOfMessages):
+    return service.users().messages().list(userId=userId, maxResults=numberOfMessages).execute()
+
+
 def main():
 
     arguments_tuple = load_arguments()
@@ -77,7 +84,7 @@ def main():
     service = build('gmail', 'v1', credentials=creds())
 
     # Call the Gmail API
-    results = service.users().messages().list(userId='me', maxResults=5).execute()
+    results = list_messages(service, 'me', 5)
     messages = results.get('messages', [])
 
     if not messages:
