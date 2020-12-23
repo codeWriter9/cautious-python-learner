@@ -76,6 +76,10 @@ def list_messages(service, userId, numberOfMessages):
     return service.users().messages().list(userId=userId, maxResults=numberOfMessages).execute()
 
 
+def get_message(service, userId, message):
+   return service.users().messages().get(userId=userId, id=message['id']).execute()
+
+
 def main():
 
     arguments_tuple = load_arguments()
@@ -93,7 +97,7 @@ def main():
         print('Fetching messages:')
         for message in messages:
             try:
-                msg_body = service.users().messages().get(userId='me', id=message['id']).execute()
+                msg_body = get_message(service, 'me', message)
                 headers, labels = msg_body['payload']['headers'], msg_body['labelIds']
                 for header in headers:
                     if is_from(header) and to_be_trashed(labels):
