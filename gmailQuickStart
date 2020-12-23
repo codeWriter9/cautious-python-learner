@@ -19,12 +19,11 @@ def load_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("spam_email_list", help="provide spam email list")
     args = parser.parse_args()
-    if args.spam_email_list:
+    if args.spam_email_list and os.path.exists(args.spam_email_list):
         print(args.spam_email_list)
-        if os.path.exists(args.spam_email_list):
-            with open(args.spam_email_list, 'r') as spam_list_file:
-                for line in spam_list_file:
-                    res.append(line)
+        with open(args.spam_email_list, 'r') as spam_list_file:
+            for line in spam_list_file:
+                res.append(line)
     print("=======loaded====SPAM=LIST=====")
     for email in res:
         GLOBAL_SPAM_LIST.append(email.replace("\n", ""))
@@ -78,7 +77,7 @@ def main():
     service = build('gmail', 'v1', credentials=creds())
 
     # Call the Gmail API
-    results = service.users().messages().list(userId='me', maxResults=20).execute()
+    results = service.users().messages().list(userId='me', maxResults=5).execute()
     messages = results.get('messages', [])
 
     if not messages:
