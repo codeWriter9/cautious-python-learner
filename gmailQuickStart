@@ -80,6 +80,10 @@ def get_message(service, userId, message):
    return service.users().messages().get(userId=userId, id=message['id']).execute()
 
 
+def trash_message(service, userId, message):
+   return service.users().messages().trash(userId=userId, id=message['id']).execute()
+
+
 def main():
 
     arguments_tuple = load_arguments()
@@ -105,20 +109,20 @@ def main():
                         if email in GLOBAL_SPAM_LIST:
                             print("Trashing Message: " + str(message['id']) + " :from: " + str(email))
                             try:
-                                trash_response = service.users().messages().trash(userId='me', id=message['id']).execute()
+                                trash_response = trash_message(service, 'me', message)
                                 print("Trashed: " + str(message['id']) + " :Response: " + str(trash_response))
-                            except Exception as inst:
-                                print(type(inst))
+                            except Exception as exception:
+                                print(type(exception))
                                 continue
                         else:
                             try:
                                 print("\tSkipping Message:" + " :from: " + str(email))
                                 print("\t" + str(msg_body['labelIds']) + ":" + str(msg_body['snippet']))
-                            except Exception as inst:
-                                print(type(inst))
+                            except Exception as exception:
+                                print(type(exception))
                                 continue
-            except  Exception as inst:
-                print(type(inst))
+            except  Exception as exception:
+                print(type(exception))
                 continue
             print("\n")
 
